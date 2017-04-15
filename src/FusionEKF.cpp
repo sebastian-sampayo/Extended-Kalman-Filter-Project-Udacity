@@ -151,16 +151,26 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    TODO:
      * Use the sensor type to perform the update step.
      * Update the state and covariance matrices.
+     * Note: In this case the measurement covariance matrices do not change for
+     * each time step, so we could set them in the initialization instead of 
+     * every time. However, in a more complex case we could have the error
+     * information from the sensors datasheets, so R would change in each time step.
    */
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
+    // Check if the measurement is valid, else skip update step
+    ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
+    if (ekf_.H_ != MatrixXd::Zero(3,4)) {
+      ekf_.R_ = R_radar_; // TODO: for optimization, this could be done in the initialization step
+      // ekf_.UpdateEKF(measurement_pack.raw_measurements_);
+    }
   } else {
     // Laser updates
     assert(measurement_pack.sensor_type_ == MeasurementPackage::LASER);
     // Set measurement matrix H for Laser, then update estimations
-    ekf_.H_ = H_laser_;
-    ekf_.R_ = R_laser_;
+    ekf_.H_ = H_laser_; // TODO: for optimization, this could be done in the initialization step
+    ekf_.R_ = R_laser_; // TODO: for optimization, this could be done in the initialization step
     ekf_.Update(measurement_pack.raw_measurements_);
   }
 
