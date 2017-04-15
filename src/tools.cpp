@@ -1,8 +1,9 @@
+#include "tools.h"
+
 #include <iostream>
 #include <stdlib.h>
 
 #include "common.h"
-#include "tools.h"
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;

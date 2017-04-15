@@ -1,7 +1,9 @@
+#include "FusionEKF.h"
+
+#include <assert.h>
 #include <iostream>
 
 #include "Eigen/Dense"
-#include "FusionEKF.h"
 #include "tools.h"
 
 using namespace std;
@@ -20,18 +22,30 @@ FusionEKF::FusionEKF() {
   // initializing matrices
   ekf_.x_ = VectorXd(4);
   ekf_.F_ = MatrixXd(4, 4);
-  ekf_.Q_ = MatrixXd(4, 4);
   ekf_.P_ = MatrixXd(4, 4);
+  ekf_.Q_ = MatrixXd(4, 4);
   R_laser_ = MatrixXd(2, 2);
   R_radar_ = MatrixXd(3, 3);
   H_laser_ = MatrixXd(2, 4);
   Hj_ = MatrixXd(3, 4);
 
+  //the initial transition matrix F_
+  ekf_.F_ << 1, 0, 1, 0,
+            0, 1, 0, 1,
+            0, 0, 1, 0,
+            0, 0, 0, 1;
+            
   //state covariance matrix P
   ekf_.P_ << 1, 0, 0, 0,
              0, 1, 0, 0,
              0, 0, 1000, 0,
              0, 0, 0, 1000;
+
+              //the process covariance matrix Q_
+  ekf_.Q_ << 1, 0, 1, 0,
+            0, 1, 0, 1,
+            1, 0, 1, 0,
+            0, 1, 0, 1;
 
   //measurement covariance matrix - laser
   R_laser_ << 0.0225, 0,
@@ -41,18 +55,10 @@ FusionEKF::FusionEKF() {
   R_radar_ << 0.09, 0, 0,
               0, 0.0009, 0,
               0, 0, 0.09;
-        
-  //the initial transition matrix F_
-  ekf_.F_ << 1, 0, 1, 0,
-            0, 1, 0, 1,
-            0, 0, 1, 0,
-            0, 0, 0, 1;
-            
-  //the process covariance matrix Q_
-  ekf_.Q_ << 1, 0, 1, 0,
-            0, 1, 0, 1,
-            1, 0, 1, 0,
-            0, 1, 0, 1;
+
+  //measurement covariance matrix - laser
+  H_laser_ << 1, 0, 0, 0,
+              0, 1, 0, 0;
 
   /**
   TODO:
@@ -78,31 +84,30 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    ****************************************************************************/
   if (!is_initialized_) {
     /**
+      * TODO: DONE
       * Initialize the state ekf_.x_ with the first measurement.
       * Create the covariance matrix.
     */
     // first measurement
+#ifdef DEBUG
     cout << "EKF: " << endl;
+#endif
     ekf_.x_ = VectorXd(4);
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-      /**
-      Convert radar from polar to cartesian coordinates and initialize state.
-      */
+      // Convert radar from polar to cartesian coordinates and initialize state.
       ekf_.x_ = tools.CalculatePolar2Cartesian(measurement_pack.raw_measurements_);
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
-      /**
-      Initialize state.
-      */
+      // Initialize state.
       ekf_.x_ << measurement_pack.raw_measurements_[0], 
                  measurement_pack.raw_measurements_[1],
                  0, 0;
     }
 
-    previous_timestamp_ = measurement_pack.timestamp_;
     // done initializing, no need to predict or update
     is_initialized_ = true;
+    previous_timestamp_ = measurement_pack.timestamp_;  
     return;
   }
 
@@ -112,9 +117,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    ****************************************************************************/
 
   /**
-   TODO:
+   TODO: DONE
      * Update the state transition matrix F according to the new elapsed time.
-      - Time is measured in seconds.
+      - Time is measured in seconds and timestamps are in microseconds.
      * Update the process noise covariance matrix.
      * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
    */
@@ -152,10 +157,17 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // Radar updates
   } else {
     // Laser updates
-    // assert type == LASER
+    assert(measurement_pack.sensor_type_ == MeasurementPackage::LASER);
+    // Set measurement matrix H for Laser, then update estimations
+    ekf_.H_ = H_laser_;
+    ekf_.R_ = R_laser_;
+    ekf_.Update(measurement_pack.raw_measurements_);
   }
 
   // print the output
-  cout << "x_ = " << ekf_.x_ << endl;
-  cout << "P_ = " << ekf_.P_ << endl;
+#ifdef DEBUG
+  cout << "-------------------" << endl;
+  cout << "x_ = " << endl << ekf_.x_ << endl;
+  cout << "P_ = " << endl << ekf_.P_ << endl;
+#endif
 }

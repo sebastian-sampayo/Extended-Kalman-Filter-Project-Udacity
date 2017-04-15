@@ -181,5 +181,5 @@ int main(int argc, char* argv[]) {
     in_file_.close();
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }
