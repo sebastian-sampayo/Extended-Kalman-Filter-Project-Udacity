@@ -5,7 +5,7 @@
 
 class GroundTruthPackage {
 public:
-  long timestamp_;
+  long long timestamp_;
 
   enum SensorType{
     LASER,
@@ -13,7 +13,6 @@ public:
   } sensor_type_;
 
   Eigen::VectorXd gt_values_;
-
 };
 
 #endif /* GROUND_TRUTH_PACKAGE_H_ */
