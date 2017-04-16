@@ -24,6 +24,7 @@ That means that our position estimates have an error of approximately 0.1m while
 
 ### Input measurements
 The program was also tested with a set of input measurements from the files in the folder `data\`.
+See `Docs\Input_Output File Format.txt` for file format.
 
 #### Data 1
 - For the input `sample-laser-radar-measurement-data-1.txt` the RMSE values obtained were:

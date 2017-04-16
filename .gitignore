@@ -4,6 +4,9 @@
 # build files
 build/
 
+# 2D Unity Visualizer
+utils/
+
 # editor config
 .vscode/
 
@@ -22,4 +25,3 @@ xcuserdata/
 *.xcscmblueprint
 ide_profiles/xcode/Debug/
 ide_profiles/xcode/ExtendedKF.build/
-utils/
