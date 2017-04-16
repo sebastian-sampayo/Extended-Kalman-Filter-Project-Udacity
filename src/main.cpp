@@ -1,3 +1,16 @@
+/****************************************************************************\
+ * Udacity Nanodegree: Self-Driving Car Engineering - December cohort
+ * Project 6: Extended Kalman Filter
+ * Date: 16th April 2017
+ * 
+ * Author: Sebastián Lucas Sampayo
+ * e-mail: sebisampayo@gmail.com
+ * file: main.cpp
+ * Description: Reads in the sensor data line by line and stores the data into
+ * a measurement list and a ground truth list. Then, a for loop iterates 
+ * through the measurement list processing each one with the Kalman Filter.
+\****************************************************************************/
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -146,11 +159,10 @@ int main(int argc, char* argv[]) {
 
     // output the measurements
     if (measurement_pack_list[k].sensor_type_ == MeasurementPackage::LASER) {
-      // output the estimation
       out_file_ << measurement_pack_list[k].raw_measurements_(0) << "\t";
       out_file_ << measurement_pack_list[k].raw_measurements_(1) << "\t";
     } else if (measurement_pack_list[k].sensor_type_ == MeasurementPackage::RADAR) {
-      // output the estimation in the cartesian coordinates
+      // output the measurement in the cartesian coordinates
       float ro = measurement_pack_list[k].raw_measurements_(0);
       float phi = measurement_pack_list[k].raw_measurements_(1);
       out_file_ << ro * cos(phi) << "\t"; // p1_meas

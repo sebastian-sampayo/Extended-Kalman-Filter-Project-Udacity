@@ -29,7 +29,7 @@ void KalmanFilter::Predict() {
   TODO: DONE
     * predict the state
   */
-  MatrixXd Ft = F_.transpose();
+  const MatrixXd Ft = F_.transpose();
 
   x_ = F_ * x_;
   P_ = F_ * P_ * Ft + Q_;
@@ -40,7 +40,7 @@ void KalmanFilter::Update(const VectorXd &z) {
   TODO: DONE
     * update the state by using Kalman Filter equations
   */
-  VectorXd z_pred = H_ * x_;
+  const VectorXd z_pred = H_ * x_;
   Update_(z, z_pred);
 }
 
@@ -50,13 +50,14 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     * update the state by using Extended Kalman Filter equations
   */
   if (h_) {
-    VectorXd z_pred = h_(x_);
+    const VectorXd z_pred = h_(x_);
     Update_(z, z_pred);
   } else {
     // skip update step
     cerr << 
-      "KalmanFilter::UpdateEKF() - WARNING: h_ empty. Set h(x) function before calling UpdateEKF()"
+      "KalmanFilter::UpdateEKF() - WARNING: h_ empty. Set h(x) function before calling UpdateEKF(). DEBUG: Skipping update step. RELEASE: assert."
       << endl;
+    assert(false);
   }
 }
 
@@ -74,7 +75,7 @@ void KalmanFilter::Update_(const Eigen::VectorXd &z, const Eigen::VectorXd &z_pr
 
   //new estimates
   x_ = x_ + (K * y);
-  long x_size = x_.size();
-  MatrixXd I = MatrixXd::Identity(x_size, x_size);
+  const long x_size = x_.size();
+  const MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
 }

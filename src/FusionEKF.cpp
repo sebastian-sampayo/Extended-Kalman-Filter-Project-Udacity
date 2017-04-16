@@ -183,6 +183,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
+    // TODO: there might be some shit going on when the phi measurement changes suddenly from pi to -pi. Check this.
     ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
     if (ekf_.H_ != MatrixXd::Zero(3,4)) { // sanity check
       ekf_.R_ = R_radar_;
