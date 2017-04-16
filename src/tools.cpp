@@ -18,7 +18,7 @@ Tools::~Tools() {}
 
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   /**
-  TODO:
+  TODO: DONE
     * Calculate a Jacobian here.
     * If the radio of the measurement is 0, it would mean that the object being tracked is located
     * at the same position as the radar, which is inside the car. This is unlikely and we will
@@ -28,19 +28,19 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   MatrixXd Hj = MatrixXd::Zero(3,4);
   
   //recover state parameters
-  float px = x_state(0);
-  float py = x_state(1);
-  float vx = x_state(2);
-  float vy = x_state(3);
+  const double px = x_state(0);
+  const double py = x_state(1);
+  const double vx = x_state(2);
+  const double vy = x_state(3);
 
   //pre-compute a set of terms to avoid repeated calculation
-  float c1 = px*px + py*py;
-  float c2 = sqrt(c1);
-  float c3 = (c1*c2);
+  const double c1 = px*px + py*py;
+  const double c2 = sqrt(c1);
+  const double c3 = (c1*c2);
 
   //check division by zero. If c1 = 0 it means that the radio of the measurement is 0
-  if(fabs(c1) < 0.0001){
-    cerr << "CalculateJacobian () - Error - Division by Zero" << endl;
+  if (fabs(c1) < 0.0001) {
+    cerr << "Tools::CalculateJacobian() - Error - Division by Zero" << endl;
     return Hj;
   }
 
@@ -55,7 +55,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   return Hj;
 }
 
-VectorXd Tools::CalculatePolar2Cartesian(const Eigen::VectorXd& polar) {
+VectorXd Tools::ConvertRadar2State(const Eigen::VectorXd& polar) {
   /**
   * Cartesian velocity is the actual velocity of the object, while polar velocity (ro_dot) is the 
   * measure from the radar.
@@ -88,8 +88,38 @@ VectorXd Tools::CalculatePolar2Cartesian(const Eigen::VectorXd& polar) {
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
   /**
-  TODO:
+  TODO: DONE
     * Calculate the RMSE here.
   */
-  return estimations[0];
+  VectorXd rmse(4);
+  rmse << 0,0,0,0;
+
+  // check the validity of the following inputs:
+  //  * the estimation vector size should not be zero
+  //  * the estimation vector size should equal ground truth vector size
+  if (estimations.size() != ground_truth.size()
+      || estimations.size() == 0) {
+    cerr << "Tools::CalculateRMSE() - Invalid estimation or ground_truth data" << endl;
+    return rmse;
+  }
+
+  //accumulate squared residuals
+  unsigned int N = estimations.size();
+  for (unsigned int i=0; i < N; ++i) {
+
+    VectorXd residual = estimations[i] - ground_truth[i];
+
+    //coefficient-wise multiplication
+    residual = residual.array()*residual.array();
+    rmse += residual;
+  }
+
+  //calculate the mean
+  rmse = rmse/N;
+
+  //calculate the squared root
+  rmse = rmse.array().sqrt();
+
+  //return the result
+  return rmse;
 }

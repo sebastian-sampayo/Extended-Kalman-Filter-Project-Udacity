@@ -1,7 +1,11 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 
+#include <functional>
+
 #include "Eigen/Dense"
+
+typedef std::function<Eigen::VectorXd(const Eigen::VectorXd&)> VectorField;
 
 class KalmanFilter {
 public:
@@ -12,7 +16,7 @@ public:
   // state covariance matrix
   Eigen::MatrixXd P_;
 
-  // state transistion matrix
+  // state transition matrix
   Eigen::MatrixXd F_;
 
   // process covariance matrix
@@ -23,6 +27,9 @@ public:
 
   // measurement covariance matrix
   Eigen::MatrixXd R_;
+  
+  // non-linear measurement function callback h(x)
+  VectorField h_;
 
   /**
    * Constructor
@@ -44,7 +51,7 @@ public:
    * @param Q_in Process covariance matrix
    */
   void Init(Eigen::VectorXd &x_in, Eigen::MatrixXd &P_in, Eigen::MatrixXd &F_in,
-      Eigen::MatrixXd &H_in, Eigen::MatrixXd &R_in, Eigen::MatrixXd &Q_in);
+      Eigen::MatrixXd &H_in, Eigen::MatrixXd &R_in, Eigen::MatrixXd &Q_in, VectorField &h_in);
 
   /**
    * Prediction Predicts the state and the state covariance
@@ -65,6 +72,14 @@ public:
    */
   void UpdateEKF(const Eigen::VectorXd &z);
 
+private:
+  /**
+   * Do the actual update of the state by using Kalman Filter equations.
+   * This is used both by Update and UpdateEKF to avoid duplicated code.
+   * @param z The measurement at k+1
+   * @param z_pred The prediction at k+1
+   */
+  void Update_(const Eigen::VectorXd &z, const Eigen::VectorXd &z_pred);
 };
 
 #endif /* KALMAN_FILTER_H_ */
