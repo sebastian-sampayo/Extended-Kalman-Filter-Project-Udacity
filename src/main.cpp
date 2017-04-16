@@ -27,6 +27,7 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
 
+// ----------------------------------------------------------------------------
 void check_arguments(int argc, char* argv[]) {
   string usage_instructions = "Usage instructions: ";
   usage_instructions += argv[0];
@@ -50,6 +51,7 @@ void check_arguments(int argc, char* argv[]) {
   }
 }
 
+// ----------------------------------------------------------------------------
 void check_files(ifstream& in_file, string& in_name,
                  ofstream& out_file, string& out_name) {
   if (!in_file.is_open()) {
@@ -63,6 +65,7 @@ void check_files(ifstream& in_file, string& in_name,
   }
 }
 
+// ----------------------------------------------------------------------------
 int main(int argc, char* argv[]) {
 
   check_arguments(argc, argv);

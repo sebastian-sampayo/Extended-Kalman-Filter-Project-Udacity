@@ -1,3 +1,18 @@
+/****************************************************************************\
+ * Udacity Nanodegree: Self-Driving Car Engineering - December cohort
+ * Project 6: Extended Kalman Filter
+ * Date: 16th April 2017
+ * 
+ * Author: Sebastián Lucas Sampayo
+ * e-mail: sebisampayo@gmail.com
+ * file: kalman_filter.h
+ * Description: This is are the core functions of the Kalman Filter algorithm.
+ * The attribute members of this class are the matrices of the linear model
+ * plus a non-linear function for the measurement. The methods allow to 
+ * predict and update the estimations, whether we want to use a simple 
+ * Kalman Filter (Update()) or an Extended Kalman Filter (UpdateEKF()).
+\****************************************************************************/
+
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 

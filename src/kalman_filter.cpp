@@ -1,6 +1,15 @@
-#include "kalman_filter.h"
+/****************************************************************************\
+ * Udacity Nanodegree: Self-Driving Car Engineering - December cohort
+ * Project 6: Extended Kalman Filter
+ * Date: 16th April 2017
+ * 
+ * Author: Sebastián Lucas Sampayo
+ * e-mail: sebisampayo@gmail.com
+ * file: kalman_filter.cpp
+ * Description: Implementation of KalmanFilter class (see header for details)
+\****************************************************************************/
 
-#include <iostream>
+#include "kalman_filter.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -8,10 +17,17 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+/*****************************************************************************
+ *  PUBLIC
+ ****************************************************************************/
+
+// ----------------------------------------------------------------------------
 KalmanFilter::KalmanFilter() {}
 
+// ----------------------------------------------------------------------------
 KalmanFilter::~KalmanFilter() {}
 
+// ----------------------------------------------------------------------------
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
                         MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in,
                         VectorField &h_in) {
@@ -24,48 +40,36 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
   h_ = h_in;
 }
 
+// ----------------------------------------------------------------------------
 void KalmanFilter::Predict() {
-  /**
-  TODO: DONE
-    * predict the state
-  */
   const MatrixXd Ft = F_.transpose();
 
   x_ = F_ * x_;
   P_ = F_ * P_ * Ft + Q_;
 }
 
+// ----------------------------------------------------------------------------
 void KalmanFilter::Update(const VectorXd &z) {
-  /**
-  TODO: DONE
-    * update the state by using Kalman Filter equations
-  */
+  //Simple Kalman Filter
   const VectorXd z_pred = H_ * x_;
   Update_(z, z_pred);
 }
 
+// ----------------------------------------------------------------------------
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-  TODO: DONE
-    * update the state by using Extended Kalman Filter equations
-  */
-  if (h_) {
-    const VectorXd z_pred = h_(x_);
-    Update_(z, z_pred);
-  } else {
-    // skip update step
-    cerr << 
-      "KalmanFilter::UpdateEKF() - WARNING: h_ empty. Set h(x) function before calling UpdateEKF(). DEBUG: Skipping update step. RELEASE: assert."
-      << endl;
-    assert(false);
-  }
+  //Extended Kalman Filter
+  assert(h_); // h_ must be set.
+  const VectorXd z_pred = h_(x_);
+  Update_(z, z_pred);
 }
 
 /*****************************************************************************
  *  PRIVATE
  ****************************************************************************/
+ 
+// ----------------------------------------------------------------------------
 void KalmanFilter::Update_(const Eigen::VectorXd &z, const Eigen::VectorXd &z_pred) {
-  // Calculate the kalman gain matrix
+  //Calculate the kalman gain matrix
   const VectorXd y = z - z_pred;
   const MatrixXd Ht = H_.transpose();
   const MatrixXd S = H_ * P_ * Ht + R_;

@@ -1,3 +1,16 @@
+/****************************************************************************\
+ * Udacity Nanodegree: Self-Driving Car Engineering - December cohort
+ * Project 6: Extended Kalman Filter
+ * Date: 16th April 2017
+ * 
+ * Author: Sebastián Lucas Sampayo
+ * e-mail: sebisampayo@gmail.com
+ * file: FusionEKF.h
+ * Description: This is a high level class containing the Sensor Fusion.
+ * ProcessMeasurement() expects a measurement package described in the
+ * MeasurementPackage class (file: measurement_package.h)
+\****************************************************************************/
+
 #ifndef FusionEKF_H_
 #define FusionEKF_H_
 
@@ -24,6 +37,7 @@ public:
 
   /**
   * Run the whole flow of the Kalman Filter from here.
+  * @param measurement_pack The last measurement
   */
   void ProcessMeasurement(const MeasurementPackage &measurement_pack);
 

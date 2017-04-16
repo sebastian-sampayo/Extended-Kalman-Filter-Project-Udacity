@@ -1,3 +1,14 @@
+/****************************************************************************\
+ * Udacity Nanodegree: Self-Driving Car Engineering - December cohort
+ * Project 6: Extended Kalman Filter
+ * Date: 16th April 2017
+ * 
+ * Author: Sebastián Lucas Sampayo
+ * e-mail: sebisampayo@gmail.com
+ * file: FusionEKF.cpp
+ * Description: Implementation of FusionEKF class (see header for details)
+\****************************************************************************/
+
 #include "FusionEKF.h"
 
 #include <assert.h>
@@ -11,6 +22,11 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
 
+/*****************************************************************************
+ *  PUBLIC
+ ****************************************************************************/
+
+// ----------------------------------------------------------------------------
 /*
  * Constructor.
  */
@@ -49,7 +65,7 @@ FusionEKF::FusionEKF() {
     const double vx = x_state(2);
     const double vy = x_state(3);
     
-    // z = h(x)
+    //z = h(x)
     z(0) = sqrt(px*px + py*py);
     z(1) = atan2(py, px);
     z(2) = (px*vx + py*vy) / z(0);
@@ -76,23 +92,20 @@ FusionEKF::FusionEKF() {
   R_radar_ << 0.09, 0, 0,
               0, 0.0009, 0,
               0, 0, 0.09;
-  
-  /**
-  TODO: DONE
-    * Finish initializing the FusionEKF.
-    * Set the process and measurement noises
-  */
+
   //set the acceleration noise components
   noise_ax = 9;
   noise_ay = 9;
 
 }
 
+// ----------------------------------------------------------------------------
 /**
 * Destructor.
 */
 FusionEKF::~FusionEKF() {}
 
+// ----------------------------------------------------------------------------
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
 #ifdef DEBUG
