@@ -7,19 +7,26 @@ This work is part of the Self-Driving Car Engineer Nanodegree Program.
 
 [//]: # (Image References)
 [simulation]: ./img/simulation.png
+[sample1]: ./img/sample1_p.png
+[sample2]: ./img/sample2_p.png
 
-## Simulation
+## Results
+### Simulator
 In order to test the program I used a visualization tool provided by Udacity that plots noisy lidar and radar measurements as a simulated car drives in a figure eight pattern. 
 However, we should note that in the real world application the radar will be placed fixed to the car, so the origin will always be at the same position as the car. In the real case we are tracking pedestrians, not the car itself.
 In the next figure we can see the lidar and radar position measurements (as red and blue circles respectively) as well as the filter estimations (as green triangles).
+
 ![Simulator][simulation]
+
 We can also see the Root Mean Squared Error (RMSE) of the estimations for each step in the UI. 
 This numbers may be considered as standard deviation errors for the estimations. 
 That means that our position estimates have an error of approximately 0.1m while for the velocity we have 0.4 m/s.
 
+### Input measurements
 The program was also tested with a set of input measurements from the files in the folder `data\`.
-In these cases I obtained the following RMSE values at the end of the loop:
-- For the input `sample-laser-radar-measurement-data-1.txt`:
+
+#### Data 1
+- For the input `sample-laser-radar-measurement-data-1.txt` the RMSE values obtained were:
   ```
   Accuracy - RMSE:
   px: 0.0651649
@@ -27,7 +34,13 @@ In these cases I obtained the following RMSE values at the end of the loop:
   vx: 0.539999
   vz: 0.54419
   ```
-- For the input `sample-laser-radar-measurement-data-2.txt`:
+  
+Here it's a plot of the x and y position measured, estimated and ground truth values
+
+![Data 1][sample1]
+
+#### Data 2
+- For the input `sample-laser-radar-measurement-data-2.txt` the RMSE values obtained were:
   ```
   Accuracy - RMSE:
   px: 0.185496
@@ -35,6 +48,10 @@ In these cases I obtained the following RMSE values at the end of the loop:
   vx: 0.476754
   vz: 0.804469
   ```
+  
+Here it's a plot of the x and y position measured, estimated and ground truth values
+
+![Data 2][sample2]
 
 ## Source files hierarchy and description
 - main.cpp : Main program. Reads in measurements and apply Sensor Fusion algorithm.
