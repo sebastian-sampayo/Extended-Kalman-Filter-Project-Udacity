@@ -1,5 +1,5 @@
 # Extended Kalman Filter Project
-In this project I implement an Extended Kalman Filter to make Sensor Fusion with Radar and Laser measurements.
+In this project I implement an Extended Kalman Filter to make Sensor Fusion with Radar and Lidar measurements.
 The code is written in C++, because this language provides great performance in terms of memory and speed (if we do things the right way).
 This work is part of the Self-Driving Car Engineer Nanodegree Program.
 
