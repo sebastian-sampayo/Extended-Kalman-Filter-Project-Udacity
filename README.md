@@ -9,10 +9,32 @@ This work is part of the Self-Driving Car Engineer Nanodegree Program.
 [simulation]: ./img/simulation.png
 
 ## Simulation
-In order to test the program I used a visualization tool provided by Udacity that plots noisy lidar and radar measurements as a simulated car drives in a figure eight pattern.
+In order to test the program I used a visualization tool provided by Udacity that plots noisy lidar and radar measurements as a simulated car drives in a figure eight pattern. 
+However, we should note that in the real world application the radar will be placed fixed to the car, so the origin will always be at the same position as the car. In the real case we are tracking pedestrians, not the car itself.
 In the next figure we can see the lidar and radar position measurements (as red and blue circles respectively) as well as the filter estimations (as green triangles).
 ![Simulator][simulation]
-We 
+We can also see the Root Mean Squared Error (RMSE) of the estimations for each step in the UI. 
+This numbers may be considered as standard deviation errors for the estimations. 
+That means that our position estimates have an error of approximately 0.1m while for the velocity we have 0.4 m/s.
+
+The program was also tested with a set of input measurements from the files in the folder `data\`.
+In these cases I obtained the following RMSE values at the end of the loop:
+- For the input `sample-laser-radar-measurement-data-1.txt`:
+  ```
+  Accuracy - RMSE:
+  px: 0.0651649
+  py: 0.0605378
+  vx: 0.539999
+  vz: 0.54419
+  ```
+- For the input `sample-laser-radar-measurement-data-2.txt`:
+  ```
+  Accuracy - RMSE:
+  px: 0.185496
+  py: 0.190302
+  vx: 0.476754
+  vz: 0.804469
+  ```
 
 ## Source files hierarchy and description
 - main.cpp : Main program. Reads in measurements and apply Sensor Fusion algorithm.
