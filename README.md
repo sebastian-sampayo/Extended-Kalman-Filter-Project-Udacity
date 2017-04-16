@@ -5,11 +5,23 @@ This work is part of the Self-Driving Car Engineer Nanodegree Program.
 
 ---
 
-## File hierarchy
-- main.cpp
-  - FusionEKF.cpp
+[//]: # (Image References)
+[simulation]: ./utils/simulation.png
 
-## Dependencies
+## Simulation
+In order to test the program I used a visualization tool provided by Udacity that plots noisy lidar and radar measurements as a simulated car drives in a figure eight pattern.
+The program can also record measurement data directly to a text file and then use a python script to call a compiled c++ Kalman Filter file to track estimated markers and RMSE values visually in real time.
+![Simulator][simulation]
+
+## Source files hierarchy and description
+- main.cpp : Main program. Reads in measurements and apply Sensor Fusion algorithm.
+  - FusionEKF.cpp/.h : Sensor Fusion high level class.
+    - kalman_filter.cpp/.h: Kalman Filter low level class. Implements both simple and extended Kalman Filter.
+    - tools.cpp/.h : Common math tools.
+    - measurement_package.h : Class for measurements values.
+  - ground_truth_package.h : Class for ground truth values.
+
+## Application dependencies
 
 * cmake >= 3.5
  * All OSes: [click here for installation instructions](https://cmake.org/install/)
@@ -32,5 +44,3 @@ This work is part of the Self-Driving Car Engineer Nanodegree Program.
    some sample inputs in 'data/'.
     - eg. `./ExtendedKF ../data/sample-laser-radar-measurement-data-1.txt output.txt`
 
-
-## Another title
