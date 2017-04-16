@@ -66,7 +66,7 @@ Here it's a plot of the x and y position measured, estimated and ground truth va
 To build the program there are some applications you have to install on your computer
 
 * cmake >= 3.5
- * All OSes: [click here for installation instructions](https://cmake.org/install/)
+  * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1
   * Linux: make is installed by default on most Linux distros
   * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
