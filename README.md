@@ -10,8 +10,9 @@ This work is part of the Self-Driving Car Engineer Nanodegree Program.
 
 ## Simulation
 In order to test the program I used a visualization tool provided by Udacity that plots noisy lidar and radar measurements as a simulated car drives in a figure eight pattern.
-The program can also record measurement data directly to a text file and then use a python script to call a compiled c++ Kalman Filter file to track estimated markers and RMSE values visually in real time.
+In the next figure we can see the lidar and radar position measurements (as red and blue circles respectively) as well as the filter estimations (as green triangles).
 ![Simulator][simulation]
+The program can also record measurement data directly to a text file and then use a python script to call a compiled c++ Kalman Filter file to track estimated markers and RMSE values visually in real time.
 
 ## Source files hierarchy and description
 - main.cpp : Main program. Reads in measurements and apply Sensor Fusion algorithm.
