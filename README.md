@@ -13,7 +13,7 @@ This work is part of the Self-Driving Car Engineer Nanodegree Program.
 ## Results
 ### Simulator
 In order to test the program I used a visualization tool provided by Udacity that plots noisy lidar and radar measurements as a simulated car drives in a figure eight pattern. 
-However, we should note that in the real world application the radar will be placed fixed to the car, so the origin will always be at the same position as the car. In the real case we are tracking pedestrians, not the car itself.
+However, we should note that in the real world application the radar will be placed fixed to the car, so the origin of the sensor axis will always be at the same position as the car. In the real case we are tracking pedestrians, not the car itself.
 In the next figure we can see the lidar and radar position measurements (as red and blue circles respectively) as well as the filter estimations (as green triangles).
 
 ![Simulator][simulation]
