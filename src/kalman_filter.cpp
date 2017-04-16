@@ -13,9 +13,6 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
-using std::cout;
-using std::cerr;
-using std::endl;
 
 /*****************************************************************************
  *  PUBLIC

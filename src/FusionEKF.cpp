@@ -115,19 +115,16 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Initialization
    ****************************************************************************/
+  //Initialize the state ekf_.x_ with the first measurement.
+  //TODO: Try different P matrix initializations. However, the final result 
+  // (after several iterations) shouldn't be very dependent on this.
   if (!is_initialized_) {
-    /**
-      * TODO: DONE
-      * Initialize the state ekf_.x_ with the first measurement.
-      * Create the covariance matrix.
-    */
     // first measurement
 #ifdef DEBUG
     cout << "x State init" << endl;
 #endif
     ekf_.x_ = VectorXd(4);
 
-      // Initialize state.
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       ekf_.x_ = tools.ConvertRadar2State(measurement_pack.raw_measurements_);
     }
@@ -147,16 +144,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
-
-  /**
-   TODO: DONE
-     * Update the state transition matrix F according to the new elapsed time.
-      - Time is measured in seconds and timestamps are in microseconds.
-     * Update the process noise covariance matrix.
-     * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
-   */
-  //compute the time elapsed between the current and previous measurements
-  //dt - expressed in seconds
+  //Compute the time elapsed between the current and previous measurements
+  //Time is measured in seconds and timestamps are in microseconds.
   const float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
   previous_timestamp_ = measurement_pack.timestamp_;
 
@@ -164,10 +153,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   const float dt_3 = dt_2 * dt;
   const float dt_4 = dt_3 * dt;
 
+  //Update the state transition matrix F according to the new elapsed time.
   //Modify the F matrix so that the time is integrated
   ekf_.F_(0, 2) = dt;
   ekf_.F_(1, 3) = dt;
 
+  //Update the process noise covariance matrix.
   //set the process covariance matrix Q
   ekf_.Q_ <<  dt_4/4*noise_ax, 0, dt_3/2*noise_ax, 0,
                0, dt_4/4*noise_ay, 0, dt_3/2*noise_ay,
@@ -179,26 +170,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Update
    ****************************************************************************/
-
-  /**
-   TODO: DONE
-     * Use the sensor type to perform the update step.
-     * Update the state and covariance matrices.
-     * Note: In this case the measurement covariance matrices do not change for
-     * each time step, so we could set them in the initialization instead of 
-     * every time. However, in a more complex case we could have the error
-     * information from the sensors datasheets, so R would change in each time step.
-     * Note on note: Actually NOT! We have one 'R' for laser and another 'R' for radar,
-     * so we must set 'R' of the KF on each update step.
-     * Set measurement matrix and measurement covariance matrix in each case, 
-     * then update the state.
-   */
-
+   //Update measurement matrix and measurement covariance matrix in each case, 
+   //then update the state, depending on the sensor type.
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
-    // TODO: there might be some shit going on when the phi measurement changes suddenly from pi to -pi. Check this.
+    // TODO: there might be some trouble when the phi measurement changes suddenly from pi to -pi. Check this and correct it.
     ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
-    if (ekf_.H_ != MatrixXd::Zero(3,4)) { // sanity check
+    if (ekf_.H_ != MatrixXd::Zero(3,4)) { // validity check
       ekf_.R_ = R_radar_;
       ekf_.UpdateEKF(measurement_pack.raw_measurements_);
     }

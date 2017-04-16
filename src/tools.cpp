@@ -14,8 +14,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "common.h"
-
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using std::vector;
