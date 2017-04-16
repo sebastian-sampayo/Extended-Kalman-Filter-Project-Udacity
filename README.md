@@ -62,6 +62,7 @@ Here it's a plot of the x and y position measured, estimated and ground truth va
   - ground_truth_package.h : Class for ground truth values.
 
 ## Application dependencies
+To build the program there are some applications you have to install on your computer
 
 * cmake >= 3.5
  * All OSes: [click here for installation instructions](https://cmake.org/install/)
