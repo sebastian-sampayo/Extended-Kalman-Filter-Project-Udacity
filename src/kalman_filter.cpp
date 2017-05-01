@@ -67,7 +67,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
 // ----------------------------------------------------------------------------
 void KalmanFilter::Update_(const Eigen::VectorXd &z, const Eigen::VectorXd &z_pred) {
   //Calculate the kalman gain matrix
-  const VectorXd y = z - z_pred;
+  VectorXd y = z - z_pred;
   const MatrixXd Ht = H_.transpose();
   const MatrixXd S = H_ * P_ * Ht + R_;
   const MatrixXd Si = S.inverse();
