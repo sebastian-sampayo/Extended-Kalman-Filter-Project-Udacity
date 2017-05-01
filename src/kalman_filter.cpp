@@ -74,6 +74,10 @@ void KalmanFilter::Update_(const Eigen::VectorXd &z, const Eigen::VectorXd &z_pr
   const MatrixXd PHt = P_ * Ht;
   const MatrixXd K = PHt * Si;
 
+  //angle normalization
+  while(y(1) > M_PI) y(1) -= 2.*M_PI;
+  while(y(1) < M_PI) y(1) += 2.*M_PI;
+
   //new estimates
   x_ = x_ + (K * y);
   const long x_size = x_.size();
